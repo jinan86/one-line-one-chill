@@ -1,24 +1,28 @@
 #!/usr/bin/env python3
-"""One Line, One Chill - make.fun entry.
+"""One-line horror entry for make.fun.
 
-Writes a single horror sentence (98 characters) to /output/entry.txt.
+Writes exactly one sentence to /output/entry.txt.
 
-Deterministic: no input, no network, no randomness, no time dependence.
-Every run produces byte-identical output.
+The program is fully deterministic: it reads no input, uses no
+network, no randomness and no clock. Every run writes the same bytes.
 """
 
-import os
+from pathlib import Path
 
-LINE = (
-    "The ultrasound showed our baby waving, and then it waved at the camera, "
-    "and then it pointed at me."
-)
+ENTRY = "The ultrasound showed our baby waving, and then it waved at the camera, and then it pointed at me."
+
+OUTPUT_PATH = Path("/output/entry.txt")
+
+
+def validate_entry(text: str) -> None:
+    assert 1 <= len(text) <= 200, "entry must be 1-200 characters"
+    assert text.strip(), "entry must not be blank"
 
 
 def main() -> None:
-    os.makedirs("/output", exist_ok=True)
-    with open("/output/entry.txt", "w", encoding="utf-8", newline="") as f:
-        f.write(LINE)
+    validate_entry(ENTRY)
+    OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT_PATH.write_text(ENTRY, encoding="utf-8")
 
 
 if __name__ == "__main__":
